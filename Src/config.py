@@ -1,7 +1,7 @@
 import sys
 from yaml import dump
 from os import path
-import Src.Utils.utils as utils
+import Utils.utils as utils
 import numpy as np
 import torch
 from collections import OrderedDict
@@ -34,7 +34,7 @@ class Config(object):
 
         # add path to models
         folder_suffix = args.experiment + args.folder_suffix
-        self.paths['Experiments'] = path.join(self.paths['root'], 'Experiments_2')
+        self.paths['Experiments'] = path.join(self.paths['root'], 'Experiments')
         self.paths['experiment'] = path.join(self.paths['Experiments'], args.env_name, args.algo_name, folder_suffix)
 
         # if args.swarm:
@@ -72,7 +72,6 @@ class Config(object):
 
         # Set Model
         self.algo = utils.dynamic_load(path.join(self.paths['root'], 'Src', 'Algorithms'), args.algo_name, load_class=True)
-
         self.feature_dim = [int(size) for size in args.NN_basis_dim.split(',')]
 
         # GPU
@@ -90,7 +89,6 @@ class Config(object):
 
 
         print("=====Configurations=====\n", args)
-
 
     def get_domain(self, tag, args, path, debug=True):
         print(path)

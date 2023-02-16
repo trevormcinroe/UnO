@@ -8,9 +8,14 @@ import shutil
 import matplotlib.pyplot as plt
 from os import path, mkdir, listdir, fsync
 import importlib
+import platform
 from time import time
 import sys
 import pickle
+
+# We need to explicitly add the root folder to the system path. Perhaps this is a Linux issue?
+# I believe the author of the codebase used Windows.
+sys.path.append("../UnO")
 
 np.random.seed(0)
 torch.manual_seed(0)
@@ -134,8 +139,6 @@ class NeuralNet(nn.Module):
         return
 
 
-
-
 def stablesoftmax(x):
     """Compute the softmax of vector x in a numerically stable way."""
     shiftx = x - np.max(x)
@@ -175,6 +178,7 @@ class Space:
         self.dtype = dtype
         self.n = len(self.low)
 
+
 def get_var_w(shape, scale=1):
     w = torch.Tensor(shape[0], shape[1])
     w = nn.init.xavier_uniform(w, gain=nn.init.calculate_gain('sigmoid'))
@@ -204,8 +208,6 @@ def weight_init(m):
         m.bias.data.zero_()
 
 
-
-
 def save_training_checkpoint(state, is_best, episode_count):
     """
     Saves the models, with all training parameters intact
@@ -218,7 +220,6 @@ def save_training_checkpoint(state, is_best, episode_count):
     torch.save(state, filename)
     if is_best:
         shutil.copyfile(filename, 'model_best.pth.tar')
-
 
 
 def search(dir, name, exact=False):
@@ -239,13 +240,19 @@ def search(dir, name, exact=False):
                 if location:
                     return location
 
+
 def dynamic_load(dir, name, load_class=False):
     try:
-        # abs_path = search(dir, name).split('/')[1:]
-        abs_path = search(dir, name).split('\\')[1:]
-        pos = abs_path.index('HCODE-pvt')
+        # TODO: the below path formulation may depend on the OS being used
+        operating_system = platform.system()
+
+        if 'linux' in operating_system:
+            abs_path = search(dir, name).split('/')[1:]
+        elif 'windows' in operating_system:
+            abs_path = search(dir, name).split('\\')[1:]
+
+        pos = abs_path.index('UnO')
         module_path = '.'.join([str(item) for item in abs_path[pos + 1:]])
-        print("Module path: ", module_path, name)
         if load_class:
             obj = getattr(importlib.import_module(module_path), name)
         else:

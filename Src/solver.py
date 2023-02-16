@@ -7,8 +7,8 @@ import argparse
 from datetime import datetime
 
 import numpy as np
-import Src.Utils.utils as utils
-from Src.config import Config
+import Utils.utils as utils
+from config import Config
 from time import time
 import matplotlib.pyplot as plt
 
@@ -28,7 +28,6 @@ class Solver:
         print("Actions space: {} :: State space: {}".format(self.action_dim, self.state_dim))
 
         self.model = config.algo(config=config)
-
 
     def train(self, max_episodes):
         # Learn the model on the environment

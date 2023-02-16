@@ -1,8 +1,6 @@
 import numpy as np
 import torch
 from Src.Utils.utils import NeuralNet
-
-from Src.Utils.Policy import Policy
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np

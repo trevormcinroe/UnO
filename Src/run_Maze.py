@@ -2,9 +2,9 @@
 
 import argparse
 from datetime import datetime
-from Src.config import Config
+from config import Config
 from time import time
-from Src.solver import Solver
+from solver import Solver
 
 ###########################################
 # Runner code
@@ -110,8 +110,13 @@ if __name__ == "__main__":
         pass
         # import cProfile
         # cProfile.run('main()', sort='cumtime')
-        # main(mode='train')
-        # main(mode='eval')
+
+        # Option 'train' trains the RL algorithm
+        main(mode='train')
+
+        # Option 'eval' evaluates the RL algorithm
+        main(mode='eval')
+
         main(mode='collectdata')
 
 
